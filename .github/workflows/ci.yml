@@ -49,19 +49,18 @@ jobs:
       - name: Validate composer.json
         run: composer validate --strict
 
-      - name: Require specific testbench version
-        run: composer require "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
-
       - name: Cache Composer packages
         uses: actions/cache@v4
         with:
           path: vendor
-          key: php-${{ matrix.php }}-laravel-${{ matrix.laravel }}-composer-${{ hashFiles('composer.lock') }}
+          key: php-${{ matrix.php }}-laravel-${{ matrix.laravel }}-composer-${{ hashFiles('composer.json') }}
           restore-keys: |
             php-${{ matrix.php }}-laravel-${{ matrix.laravel }}-composer-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress
+        run: |
+          composer require "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer update --prefer-dist --no-interaction --no-progress
 
       - name: Run PHPUnit
         run: vendor/bin/phpunit --no-coverage
