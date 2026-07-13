@@ -42,7 +42,7 @@ return [
     |                 (exponential back-off).
     |
     */
-    'retries'        => (int) env('PUSH_RETRIES', 1),
+    'retries' => (int) env('PUSH_RETRIES', 1),
     'retry_delay_ms' => (int) env('PUSH_RETRY_DELAY_MS', 500),
 
     /*
@@ -60,6 +60,6 @@ return [
     |
     */
     'poll_store' => env('PUSH_POLL_STORE', 'cache'),
-    'poll_ttl'   => (int) env('PUSH_POLL_TTL', 86400),
+    'poll_ttl' => (int) env('PUSH_POLL_TTL', 86400),
 
 ];

@@ -34,14 +34,14 @@ final class ArrayPollStore implements PollStoreInterface
         return array_values(
             array_filter(
                 $this->store[$recipientId] ?? [],
-                fn(array $n): bool => $n['delivered'] === false,
+                fn (array $n): bool => $n['delivered'] === false,
             )
         );
     }
 
     public function markDelivered(string $recipientId, array $ids): void
     {
-        if (!isset($this->store[$recipientId])) {
+        if (! isset($this->store[$recipientId])) {
             return;
         }
 

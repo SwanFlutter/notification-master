@@ -36,7 +36,7 @@ final class CachePollStore implements PollStoreInterface
 
     public function push(string $recipientId, array $notification): void
     {
-        $key   = $this->key($recipientId);
+        $key = $this->key($recipientId);
         $items = $this->cache->get($key, []);
 
         $items[] = $notification;
@@ -49,13 +49,13 @@ final class CachePollStore implements PollStoreInterface
         $items = $this->cache->get($this->key($recipientId), []);
 
         return array_values(
-            array_filter($items, fn(array $n): bool => $n['delivered'] === false)
+            array_filter($items, fn (array $n): bool => $n['delivered'] === false)
         );
     }
 
     public function markDelivered(string $recipientId, array $ids): void
     {
-        $key   = $this->key($recipientId);
+        $key = $this->key($recipientId);
         $items = $this->cache->get($key, []);
 
         if ($items === []) {
@@ -81,6 +81,6 @@ final class CachePollStore implements PollStoreInterface
 
     private function key(string $recipientId): string
     {
-        return self::KEY_PREFIX . $recipientId;
+        return self::KEY_PREFIX.$recipientId;
     }
 }

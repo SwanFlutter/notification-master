@@ -49,7 +49,9 @@ final class FirebasePush implements PushNotificationInterface
     private const RETRYABLE_CODES = [429, 500, 502, 503, 504];
 
     private readonly OAuthToken $auth;
+
     private readonly Client $http;
+
     private readonly string $endpoint;
 
     /** When true, messages are validated but not actually delivered. */
@@ -62,16 +64,16 @@ final class FirebasePush implements PushNotificationInterface
     private int $retryDelayMs = 500;
 
     /**
-     * @param string|array<string, mixed> $serviceAccount
-     *   Path to a Firebase service-account JSON file, or the decoded array.
+     * @param  string|array<string, mixed>  $serviceAccount
+     *                                                       Path to a Firebase service-account JSON file, or the decoded array.
      *
      * @throws InvalidCredentialsException
      */
     public function __construct(string|array $serviceAccount)
     {
-        $credentials    = $this->resolveCredentials($serviceAccount);
-        $this->auth     = new OAuthToken($credentials);
-        $this->http     = new Client(['timeout' => 30, 'connect_timeout' => 10]);
+        $credentials = $this->resolveCredentials($serviceAccount);
+        $this->auth = new OAuthToken($credentials);
+        $this->http = new Client(['timeout' => 30, 'connect_timeout' => 10]);
         $this->endpoint = sprintf(self::FCM_ENDPOINT, $this->auth->getProjectId());
     }
 
@@ -83,8 +85,9 @@ final class FirebasePush implements PushNotificationInterface
      */
     public function dryRun(bool $enabled = true): self
     {
-        $clone         = clone $this;
+        $clone = clone $this;
         $clone->dryRun = $enabled;
+
         return $clone;
     }
 
@@ -94,9 +97,10 @@ final class FirebasePush implements PushNotificationInterface
      */
     public function withRetries(int $retries, int $delayMs = 500): self
     {
-        $clone               = clone $this;
-        $clone->retries      = max(0, $retries);
+        $clone = clone $this;
+        $clone->retries = max(0, $retries);
         $clone->retryDelayMs = max(0, $delayMs);
+
         return $clone;
     }
 
@@ -171,16 +175,16 @@ final class FirebasePush implements PushNotificationInterface
 
         foreach ($tokens as $token) {
             try {
-                $targeted        = $message->toToken($token);
+                $targeted = $message->toToken($token);
                 $results[$token] = [
-                    'success'  => true,
+                    'success' => true,
                     'response' => $this->send($targeted),
                 ];
             } catch (SendingFailedException $e) {
                 $results[$token] = [
                     'success' => false,
-                    'error'   => $e->getMessage(),
-                    'fcm'     => $e->getFcmResponse(),
+                    'error' => $e->getMessage(),
+                    'fcm' => $e->getFcmResponse(),
                 ];
             }
         }
@@ -203,8 +207,9 @@ final class FirebasePush implements PushNotificationInterface
     // ── Internal HTTP ─────────────────────────────────────────────────────────
 
     /**
-     * @param array<string, mixed> $payload
+     * @param  array<string, mixed>  $payload
      * @return array<string, mixed>
+     *
      * @throws SendingFailedException
      */
     private function postWithRetry(array $payload): array
@@ -219,7 +224,7 @@ final class FirebasePush implements PushNotificationInterface
             } catch (SendingFailedException $e) {
                 $isRetryable = $this->isRetryableCode($e->getCode());
 
-                if ($attempts >= $maxTries || !$isRetryable) {
+                if ($attempts >= $maxTries || ! $isRetryable) {
                     throw $e;
                 }
 
@@ -234,8 +239,9 @@ final class FirebasePush implements PushNotificationInterface
     }
 
     /**
-     * @param array<string, mixed> $payload
+     * @param  array<string, mixed>  $payload
      * @return array<string, mixed>
+     *
      * @throws SendingFailedException
      */
     private function doPost(array $payload): array
@@ -243,9 +249,9 @@ final class FirebasePush implements PushNotificationInterface
         try {
             $response = $this->http->post($this->endpoint, [
                 'headers' => [
-                    'Authorization' => 'Bearer ' . $this->auth->getAccessToken(),
-                    'Content-Type'  => 'application/json',
-                    'Accept'        => 'application/json',
+                    'Authorization' => 'Bearer '.$this->auth->getAccessToken(),
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
                 ],
                 'json' => $payload,
             ]);
@@ -261,17 +267,17 @@ final class FirebasePush implements PushNotificationInterface
             return $decoded;
         } catch (RequestException $e) {
             $statusCode = $e->hasResponse() ? $e->getResponse()->getStatusCode() : 0;
-            $rawBody    = $e->hasResponse() ? (string) $e->getResponse()->getBody() : $e->getMessage();
+            $rawBody = $e->hasResponse() ? (string) $e->getResponse()->getBody() : $e->getMessage();
 
             throw new SendingFailedException(
-                message:     "FCM request failed ({$statusCode}): {$rawBody}",
-                code:        $statusCode,
-                previous:    $e,
+                message: "FCM request failed ({$statusCode}): {$rawBody}",
+                code: $statusCode,
+                previous: $e,
                 fcmResponse: $rawBody,
             );
         } catch (\JsonException $e) {
             throw new SendingFailedException(
-                message:  'Invalid JSON in FCM response: ' . $e->getMessage(),
+                message: 'Invalid JSON in FCM response: '.$e->getMessage(),
                 previous: $e,
             );
         }
@@ -285,8 +291,9 @@ final class FirebasePush implements PushNotificationInterface
     // ── Helpers ───────────────────────────────────────────────────────────────
 
     /**
-     * @param string|array<string, mixed> $serviceAccount
+     * @param  string|array<string, mixed>  $serviceAccount
      * @return array<string, mixed>
+     *
      * @throws InvalidCredentialsException
      */
     private function resolveCredentials(string|array $serviceAccount): array
@@ -295,7 +302,7 @@ final class FirebasePush implements PushNotificationInterface
             return $serviceAccount;
         }
 
-        if (!is_file($serviceAccount)) {
+        if (! is_file($serviceAccount)) {
             throw new InvalidCredentialsException(
                 "Service account file not found: {$serviceAccount}"
             );

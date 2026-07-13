@@ -59,7 +59,7 @@ final class FcmChannel
         ) {
             $token = $notifiable->routeNotificationFor('fcm', $notification);
 
-            if (!empty($token)) {
+            if (! empty($token)) {
                 $message = $message->toToken((string) $token);
             }
         }

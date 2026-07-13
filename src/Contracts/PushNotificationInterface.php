@@ -21,7 +21,7 @@ interface PushNotificationInterface
     /**
      * Convenience helper — send to a single device token.
      *
-     * @param array<string, string> $data Optional data payload (string key→value).
+     * @param  array<string, string>  $data  Optional data payload (string key→value).
      * @return array<string, mixed>
      *
      * @example
@@ -40,7 +40,7 @@ interface PushNotificationInterface
     /**
      * Convenience helper — send to an FCM topic.
      *
-     * @param array<string, string> $data
+     * @param  array<string, string>  $data
      * @return array<string, mixed>
      *
      * @example
@@ -64,7 +64,7 @@ interface PushNotificationInterface
      *   ['success' => true,  'response' => array]
      *   ['success' => false, 'error'    => string]
      *
-     * @param string[]             $tokens
+     * @param  string[]  $tokens
      * @return array<string, array<string, mixed>>
      */
     public function sendToMany(array $tokens, Message $message): array;
@@ -72,7 +72,7 @@ interface PushNotificationInterface
     /**
      * Send a raw FCM payload without any wrapping.
      *
-     * @param array<string, mixed> $payload
+     * @param  array<string, mixed>  $payload
      * @return array<string, mixed>
      */
     public function sendRaw(array $payload): array;

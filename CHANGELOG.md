@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.1] — 2026-07-13
+
+### Fixed
+- Upgraded `firebase/php-jwt` from `^6.10` to `^7.0` to resolve security advisory `PKSA-y2cr-5h3j-g3ys`.
+- Extended `orchestra/testbench` support to `^9.0|^10.0` covering both Laravel 11 and 12.
+- Fixed 12 code style issues flagged by Laravel Pint across all source files.
+- Removed `composer.lock` from version control (library best practice).
+- Added CI matrix for PHP 8.2 / 8.3 / 8.4 against Laravel 11 and 12.
+- Added automated GitHub Release workflow triggered on version tags.
+- Packagist auto-update now triggers on both branch pushes and tag pushes.
+
+---
+
 ## [1.0.0] — 2026-07-13
 
 ### Added

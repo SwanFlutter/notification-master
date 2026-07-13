@@ -49,10 +49,10 @@ final class NotificationPoller
     /**
      * Enqueue a notification for a recipient.
      *
-     * @param string                  $recipientId  Arbitrary identifier (user ID, device token, …).
-     * @param Message                 $message      The message to deliver.
-     * @param \DateTimeInterface|null $deliverAt    Optional future delivery time.
-     * @return string                               The generated notification ID.
+     * @param  string  $recipientId  Arbitrary identifier (user ID, device token, …).
+     * @param  Message  $message  The message to deliver.
+     * @param  \DateTimeInterface|null  $deliverAt  Optional future delivery time.
+     * @return string The generated notification ID.
      *
      * @example
      * ```php
@@ -74,11 +74,11 @@ final class NotificationPoller
         $id = $this->generateId();
 
         $this->store->push($recipientId, [
-            'id'         => $id,
-            'payload'    => $message->toArray(),
-            'queued_at'  => (new \DateTimeImmutable())->format(\DateTimeInterface::ATOM),
+            'id' => $id,
+            'payload' => $message->toArray(),
+            'queued_at' => (new \DateTimeImmutable)->format(\DateTimeInterface::ATOM),
             'deliver_at' => $deliverAt?->format(\DateTimeInterface::ATOM),
-            'delivered'  => false,
+            'delivered' => false,
         ]);
 
         return $id;
@@ -143,7 +143,7 @@ final class NotificationPoller
 
             try {
                 $message = $this->hydrateMessage($item['payload'], $deviceToken);
-                $result  = $sender->send($message);
+                $result = $sender->send($message);
 
                 $this->store->markDelivered($recipientId, [$notifId]);
 
@@ -184,8 +184,8 @@ final class NotificationPoller
     /**
      * Re-hydrate a stored payload array back into a Message object.
      *
-     * @param array<string, mixed> $payload  Stored FCM message array.
-     * @param string               $token    Device token to target.
+     * @param  array<string, mixed>  $payload  Stored FCM message array.
+     * @param  string  $token  Device token to target.
      */
     private function hydrateMessage(array $payload, string $token): Message
     {
@@ -200,16 +200,16 @@ final class NotificationPoller
         if (isset($payload['notification']['image'])) {
             $msg = $msg->image($payload['notification']['image']);
         }
-        if (!empty($payload['data'])) {
+        if (! empty($payload['data'])) {
             $msg = $msg->data($payload['data']);
         }
-        if (!empty($payload['android'])) {
+        if (! empty($payload['android'])) {
             $msg = $msg->android($payload['android']);
         }
-        if (!empty($payload['apns'])) {
+        if (! empty($payload['apns'])) {
             $msg = $msg->apns($payload['apns']);
         }
-        if (!empty($payload['webpush'])) {
+        if (! empty($payload['webpush'])) {
             $msg = $msg->webpush($payload['webpush']);
         }
 

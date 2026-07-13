@@ -27,12 +27,16 @@ final class Message
 {
     // ── Notification fields ───────────────────────────────────────────────────
     private ?string $title = null;
-    private ?string $body  = null;
+
+    private ?string $body = null;
+
     private ?string $image = null;
 
     // ── Target (mutually exclusive) ───────────────────────────────────────────
-    private ?string $token     = null;
-    private ?string $topic     = null;
+    private ?string $token = null;
+
+    private ?string $topic = null;
+
     private ?string $condition = null;
 
     // ── Payload ───────────────────────────────────────────────────────────────
@@ -64,29 +68,32 @@ final class Message
      */
     public static function create(): self
     {
-        return new self();
+        return new self;
     }
 
     // ── Notification ──────────────────────────────────────────────────────────
 
     public function title(string $title): self
     {
-        $clone        = clone $this;
+        $clone = clone $this;
         $clone->title = $title;
+
         return $clone;
     }
 
     public function body(string $body): self
     {
-        $clone       = clone $this;
+        $clone = clone $this;
         $clone->body = $body;
+
         return $clone;
     }
 
     public function image(string $url): self
     {
-        $clone        = clone $this;
+        $clone = clone $this;
         $clone->image = $url;
+
         return $clone;
     }
 
@@ -97,10 +104,11 @@ final class Message
      */
     public function toToken(string $token): self
     {
-        $clone            = clone $this;
-        $clone->token     = $token;
-        $clone->topic     = null;
+        $clone = clone $this;
+        $clone->token = $token;
+        $clone->topic = null;
         $clone->condition = null;
+
         return $clone;
     }
 
@@ -109,10 +117,11 @@ final class Message
      */
     public function toTopic(string $topic): self
     {
-        $clone            = clone $this;
-        $clone->topic     = $topic;
-        $clone->token     = null;
+        $clone = clone $this;
+        $clone->topic = $topic;
+        $clone->token = null;
         $clone->condition = null;
+
         return $clone;
     }
 
@@ -122,10 +131,11 @@ final class Message
      */
     public function toCondition(string $condition): self
     {
-        $clone            = clone $this;
+        $clone = clone $this;
         $clone->condition = $condition;
-        $clone->token     = null;
-        $clone->topic     = null;
+        $clone->token = null;
+        $clone->topic = null;
+
         return $clone;
     }
 
@@ -135,12 +145,13 @@ final class Message
      * Arbitrary key/value data payload.
      * All values are cast to strings as required by the FCM HTTP v1 spec.
      *
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function data(array $data): self
     {
-        $clone       = clone $this;
+        $clone = clone $this;
         $clone->data = array_map('strval', $data);
+
         return $clone;
     }
 
@@ -152,39 +163,45 @@ final class Message
      * Common fields: priority, collapse_key, ttl, restricted_package_name,
      * notification (channel_id, sound, icon, color, …).
      *
-     * @param array<string, mixed> $config
+     * @param  array<string, mixed>  $config
+     *
      * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#AndroidConfig
      */
     public function android(array $config): self
     {
-        $clone          = clone $this;
+        $clone = clone $this;
         $clone->android = $config;
+
         return $clone;
     }
 
     /**
      * Apple (APNs) specific configuration.
      *
-     * @param array<string, mixed> $config
+     * @param  array<string, mixed>  $config
+     *
      * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#ApnsConfig
      */
     public function apns(array $config): self
     {
-        $clone       = clone $this;
+        $clone = clone $this;
         $clone->apns = $config;
+
         return $clone;
     }
 
     /**
      * Web push (Webpush) specific configuration.
      *
-     * @param array<string, mixed> $config
+     * @param  array<string, mixed>  $config
+     *
      * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#WebpushConfig
      */
     public function webpush(array $config): self
     {
-        $clone          = clone $this;
+        $clone = clone $this;
         $clone->webpush = $config;
+
         return $clone;
     }
 
@@ -193,8 +210,9 @@ final class Message
      */
     public function analyticsLabel(string $label): self
     {
-        $clone                 = clone $this;
+        $clone = clone $this;
         $clone->analyticsLabel = $label;
+
         return $clone;
     }
 
@@ -204,24 +222,37 @@ final class Message
      */
     public function ttl(int $seconds): self
     {
-        $clone      = clone $this;
+        $clone = clone $this;
         $clone->ttl = $seconds;
+
         return $clone;
     }
 
     // ── Read-only getters (used by FirebasePush for multicast cloning) ─────────
 
-    public function getToken(): ?string     { return $this->token; }
-    public function getTopic(): ?string     { return $this->topic; }
-    public function getCondition(): ?string { return $this->condition; }
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function getTopic(): ?string
+    {
+        return $this->topic;
+    }
+
+    public function getCondition(): ?string
+    {
+        return $this->condition;
+    }
 
     // ── Serialisation ─────────────────────────────────────────────────────────
 
     /**
      * Serialise to an FCM HTTP v1 `message` object.
      *
-     * @throws InvalidMessageException
      * @return array<string, mixed>
+     *
+     * @throws InvalidMessageException
      */
     public function toArray(): array
     {
@@ -241,9 +272,9 @@ final class Message
         // Notification block
         $notification = array_filter([
             'title' => $this->title,
-            'body'  => $this->body,
+            'body' => $this->body,
             'image' => $this->image,
-        ], fn(mixed $v): bool => $v !== null);
+        ], fn (mixed $v): bool => $v !== null);
 
         if ($notification !== []) {
             $message['notification'] = $notification;
@@ -259,13 +290,19 @@ final class Message
         $webpush = $this->webpush;
 
         if ($this->ttl !== null) {
-            $android['ttl']              ??= $this->ttl . 's';
-            $webpush['headers']['TTL']   ??= (string) $this->ttl;
+            $android['ttl'] ??= $this->ttl.'s';
+            $webpush['headers']['TTL'] ??= (string) $this->ttl;
         }
 
-        if ($android !== [])        $message['android'] = $android;
-        if ($this->apns !== [])     $message['apns']    = $this->apns;
-        if ($webpush !== [])        $message['webpush'] = $webpush;
+        if ($android !== []) {
+            $message['android'] = $android;
+        }
+        if ($this->apns !== []) {
+            $message['apns'] = $this->apns;
+        }
+        if ($webpush !== []) {
+            $message['webpush'] = $webpush;
+        }
 
         if ($this->analyticsLabel !== null) {
             $message['fcm_options'] = ['analytics_label' => $this->analyticsLabel];

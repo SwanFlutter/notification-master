@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace SwanFlutter\NotificationMaster\Polling\Store;
 
+use SwanFlutter\NotificationMaster\Laravel\Polling\CachePollStore;
+
 /**
  * Contract for the backing store used by NotificationPoller.
  *
  * Implement this interface to use any storage backend
  * (Laravel Cache, Redis, Eloquent/database, in-memory for tests, …).
  *
- * @see \SwanFlutter\NotificationMaster\Polling\Store\ArrayPollStore   In-memory reference implementation.
- * @see \SwanFlutter\NotificationMaster\Laravel\Polling\CachePollStore Laravel Cache adapter.
+ * @see ArrayPollStore   In-memory reference implementation.
+ * @see CachePollStore Laravel Cache adapter.
  */
 interface PollStoreInterface
 {
     /**
      * Push a notification entry into the store for a recipient.
      *
-     * @param array<string, mixed> $notification Fully formed notification entry (id, payload, …).
+     * @param  array<string, mixed>  $notification  Fully formed notification entry (id, payload, …).
      */
     public function push(string $recipientId, array $notification): void;
 
@@ -32,7 +34,7 @@ interface PollStoreInterface
     /**
      * Mark a list of notification IDs as delivered for a recipient.
      *
-     * @param string[] $ids
+     * @param  string[]  $ids
      */
     public function markDelivered(string $recipientId, array $ids): void;
 

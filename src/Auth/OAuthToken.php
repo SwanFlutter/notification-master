@@ -19,7 +19,8 @@ use SwanFlutter\NotificationMaster\Exceptions\InvalidCredentialsException;
  */
 final class OAuthToken
 {
-    private const SCOPE     = 'https://www.googleapis.com/auth/firebase.messaging';
+    private const SCOPE = 'https://www.googleapis.com/auth/firebase.messaging';
+
     private const TOKEN_URI = 'https://oauth2.googleapis.com/token';
 
     /** Cached Bearer token string. */
@@ -80,7 +81,7 @@ final class OAuthToken
     public function refreshAccessToken(): string
     {
         $this->cachedToken = null;
-        $this->expiresAt   = 0;
+        $this->expiresAt = 0;
 
         return $this->fetchAccessToken();
     }
@@ -91,7 +92,7 @@ final class OAuthToken
     public function clearCache(): void
     {
         $this->cachedToken = null;
-        $this->expiresAt   = 0;
+        $this->expiresAt = 0;
     }
 
     // -------------------------------------------------------------------------
@@ -109,11 +110,11 @@ final class OAuthToken
         $now = time();
 
         $payload = [
-            'iss'   => $this->serviceAccount['client_email'],
-            'sub'   => $this->serviceAccount['client_email'],
-            'aud'   => self::TOKEN_URI,
-            'iat'   => $now,
-            'exp'   => $now + 3600,
+            'iss' => $this->serviceAccount['client_email'],
+            'sub' => $this->serviceAccount['client_email'],
+            'aud' => self::TOKEN_URI,
+            'iat' => $now,
+            'exp' => $now + 3600,
             'scope' => self::SCOPE,
         ];
 
@@ -121,17 +122,17 @@ final class OAuthToken
             $jwt = JWT::encode($payload, $this->serviceAccount['private_key'], 'RS256');
         } catch (\Throwable $e) {
             throw new AuthenticationException(
-                'Failed to sign JWT assertion: ' . $e->getMessage(),
+                'Failed to sign JWT assertion: '.$e->getMessage(),
                 previous: $e,
             );
         }
 
         try {
-            $client   = new Client(['timeout' => 15]);
+            $client = new Client(['timeout' => 15]);
             $response = $client->post(self::TOKEN_URI, [
                 'form_params' => [
                     'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-                    'assertion'  => $jwt,
+                    'assertion' => $jwt,
                 ],
             ]);
 
@@ -139,7 +140,7 @@ final class OAuthToken
             $data = json_decode((string) $response->getBody(), true, 512, JSON_THROW_ON_ERROR);
         } catch (GuzzleException $e) {
             throw new AuthenticationException(
-                'HTTP request to Google token endpoint failed: ' . $e->getMessage(),
+                'HTTP request to Google token endpoint failed: '.$e->getMessage(),
                 previous: $e,
             );
         } catch (\JsonException $e) {
@@ -154,7 +155,7 @@ final class OAuthToken
         }
 
         $this->cachedToken = $data['access_token'];
-        $this->expiresAt   = $now + (int) ($data['expires_in'] ?? 3600);
+        $this->expiresAt = $now + (int) ($data['expires_in'] ?? 3600);
 
         return $this->cachedToken;
     }

@@ -34,16 +34,16 @@ final class NotificationMasterServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/../../config/push-notification.php',
+            __DIR__.'/../../config/push-notification.php',
             'push-notification',
         );
 
         // ── FCM driver ────────────────────────────────────────────────────────
         $this->app->singleton(FirebasePush::class, function ($app): FirebasePush {
             $credentials = $app['config']->get('push-notification.credentials');
-            $retries     = (int) $app['config']->get('push-notification.retries', 1);
-            $retryDelay  = (int) $app['config']->get('push-notification.retry_delay_ms', 500);
-            $dryRun      = (bool) $app['config']->get('push-notification.dry_run', false);
+            $retries = (int) $app['config']->get('push-notification.retries', 1);
+            $retryDelay = (int) $app['config']->get('push-notification.retry_delay_ms', 500);
+            $dryRun = (bool) $app['config']->get('push-notification.dry_run', false);
 
             return (new FirebasePush($credentials))
                 ->withRetries($retries, $retryDelay)
@@ -58,7 +58,7 @@ final class NotificationMasterServiceProvider extends ServiceProvider
             $driver = $app['config']->get('push-notification.poll_store', 'cache');
 
             if ($driver === 'array') {
-                return new ArrayPollStore();
+                return new ArrayPollStore;
             }
 
             // Default: Laravel Cache adapter
@@ -80,12 +80,12 @@ final class NotificationMasterServiceProvider extends ServiceProvider
     {
         // ── Config publishing ─────────────────────────────────────────────────
         $this->publishes([
-            __DIR__ . '/../../config/push-notification.php' => config_path('push-notification.php'),
+            __DIR__.'/../../config/push-notification.php' => config_path('push-notification.php'),
         ], 'push-notification-config');
 
         // ── Register 'fcm' notification channel ───────────────────────────────
         $this->callAfterResolving(ChannelManager::class, function (ChannelManager $manager, $app): void {
-            $manager->extend('fcm', fn($app): FcmChannel => new FcmChannel(
+            $manager->extend('fcm', fn ($app): FcmChannel => new FcmChannel(
                 $app->make(PushNotificationInterface::class)
             ));
         });
