@@ -1,0 +1,66 @@
+{
+    "name": "swanflutter/notification-master",
+    "description": "A modern PHP 8.2+ / Laravel push notification package supporting Firebase FCM HTTP v1 and polling mode.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "firebase",
+        "fcm",
+        "push-notification",
+        "laravel",
+        "notification",
+        "polling",
+        "php"
+    ],
+    "authors": [
+        {
+            "name": "SwanFlutter",
+            "email": "swanflutter@example.com",
+            "role": "Developer"
+        }
+    ],
+    "homepage": "https://github.com/swanflutter/notification-master",
+    "support": {
+        "issues": "https://github.com/swanflutter/notification-master/issues",
+        "source": "https://github.com/swanflutter/notification-master"
+    },
+    "require": {
+        "php": "^8.2",
+        "ext-json": "*",
+        "ext-openssl": "*",
+        "guzzlehttp/guzzle": "^7.9",
+        "firebase/php-jwt": "^6.10"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.0",
+        "phpunit/phpunit": "^11.0",
+        "mockery/mockery": "^1.6",
+        "laravel/pint": "^1.17"
+    },
+    "autoload": {
+        "psr-4": {
+            "SwanFlutter\\NotificationMaster\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SwanFlutter\\NotificationMaster\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SwanFlutter\\NotificationMaster\\Laravel\\NotificationMasterServiceProvider"
+            ],
+            "aliases": {
+                "PushNotification": "SwanFlutter\\NotificationMaster\\Laravel\\Facades\\PushNotification"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
