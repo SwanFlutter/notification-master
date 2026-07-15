@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.2] — 2026-07-15
+
+### Fixed
+- Resolved CI dependency installation failures caused by Composer's security-advisory block rejecting all Laravel 11/12 framework versions; advisory blocking is now disabled and the affected Laravel advisories are explicitly ignored (they are transitive dev-only dependencies resolved by the host application).
+- Fixed `composer validate --strict` failing due to a duplicate `policy` key in `composer.json`.
+
+### Added
+- `phpunit.xml` configuration and a `MessageTest` unit suite (12 tests) covering the fluent `Message` builder and payload serialisation.
+
+### Changed
+- CI workflow cleanup: bumped Composer cache key, and added `--no-scripts` to the autoload dump step.
+- Kept `firebase/php-jwt` pinned at `^7.0` to avoid the `PKSA-y2cr-5h3j-g3ys` weak-encryption advisory affecting all `< 7.0.0` releases.
+
+---
+
 ## [1.0.1] — 2026-07-13
 
 ### Fixed
