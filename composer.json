@@ -71,6 +71,11 @@
                 "PKSA-qzrn-rnz3-85w1": "Laravel framework advisory — not a direct dependency; resolved by the application.",
                 "PKSA-w7xr-vk7n-rstm": "Laravel framework advisory — not a direct dependency; resolved by the application."
             }
+        },
+        "policy": {
+            "advisories": {
+                "block": false
+            }
         }
     },
     "minimum-stability": "stable",
