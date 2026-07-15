@@ -60,10 +60,16 @@
     "config": {
         "sort-packages": true,
         "optimize-autoloader": true,
-        "platform-check": false,
-        "policy": {
-            "advisories": {
-                "block": false
+        "audit": {
+            "abandoned": "report",
+            "ignore": {
+                "PKSA-m5cs-t1y6-qpcs": "Laravel framework advisory — not a direct dependency; resolved by the application.",
+                "PKSA-3r5d-mb8f-1qw9": "Laravel framework advisory — not a direct dependency; resolved by the application.",
+                "PKSA-mdq4-51ck-6kdq": "Laravel framework advisory — not a direct dependency; resolved by the application.",
+                "PKSA-8qx3-n5y5-vvnd": "Laravel framework advisory — not a direct dependency; resolved by the application.",
+                "PKSA-q46n-4fdk-zjr4": "Laravel framework advisory — not a direct dependency; resolved by the application.",
+                "PKSA-qzrn-rnz3-85w1": "Laravel framework advisory — not a direct dependency; resolved by the application.",
+                "PKSA-w7xr-vk7n-rstm": "Laravel framework advisory — not a direct dependency; resolved by the application."
             }
         },
         "policy": {
