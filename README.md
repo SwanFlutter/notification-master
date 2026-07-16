@@ -47,16 +47,41 @@ Supports real-time FCM delivery **and** a polling-mode fallback — all with a c
 |---|---|
 | PHP | `^8.2` |
 | `guzzlehttp/guzzle` | `^7.9` |
-| `firebase/php-jwt` | `^6.10` |
+| `swanflutter/native-jwt` | `^1.2` |
 | Laravel (optional) | `^10.0 \| ^11.0 \| ^12.0` |
+
+> **Note:** This package uses [`swanflutter/native-jwt`](https://packagist.org/packages/swanflutter/native-jwt) for JWT signing (RS256). It is a drop-in, dependency-free replacement for `firebase/php-jwt` with built-in `alg=none` and algorithm-confusion protection. The old `firebase/php-jwt` dependency has been removed.
 
 ---
 
 ## Installation
 
+Install the package via Composer:
+
 ```bash
 composer require swanflutter/notification-master
 ```
+
+To install a specific version:
+
+```bash
+composer require "swanflutter/notification-master:^1.0.2"
+```
+
+#### Resolving a JWT library conflict
+
+This package depends on [`swanflutter/native-jwt`](https://packagist.org/packages/swanflutter/native-jwt)
+for RS256 JWT signing. If your application still requires the deprecated
+`firebase/php-jwt`, you can migrate to `swanflutter/native-jwt`, which is a
+drop-in replacement exposing the same `JWT::encode()` / `JWT::decode()` API:
+
+```bash
+composer remove firebase/php-jwt
+composer require "swanflutter/native-jwt:^1.2"
+```
+
+If your application or another dependency still pins `firebase/php-jwt`, run
+`composer why firebase/php-jwt` to find which package holds it back.
 
 ### Laravel Setup
 

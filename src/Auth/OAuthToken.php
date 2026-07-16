@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace SwanFlutter\NotificationMaster\Auth;
 
-use Firebase\JWT\JWT;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use SwanFlutter\NativeJwt\JWT;
 use SwanFlutter\NotificationMaster\Exceptions\AuthenticationException;
 use SwanFlutter\NotificationMaster\Exceptions\InvalidCredentialsException;
 
@@ -28,6 +28,9 @@ final class OAuthToken
 
     /** Unix timestamp at which the cached token expires. */
     private int $expiresAt = 0;
+
+    /** @var Client|null Injectable HTTP client (mainly for testing). */
+    private ?Client $client = null;
 
     /**
      * @param array{
@@ -87,6 +90,14 @@ final class OAuthToken
     }
 
     /**
+     * Injects a custom Guzzle HTTP client (used primarily for testing).
+     */
+    public function setClient(Client $client): void
+    {
+        $this->client = $client;
+    }
+
+    /**
      * Clears the in-memory token cache.
      */
     public function clearCache(): void
@@ -128,7 +139,7 @@ final class OAuthToken
         }
 
         try {
-            $client = new Client(['timeout' => 15]);
+            $client = $this->client ?? new Client(['timeout' => 15]);
             $response = $client->post(self::TOKEN_URI, [
                 'form_params' => [
                     'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',

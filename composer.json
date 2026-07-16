@@ -29,7 +29,7 @@
         "ext-json": "*",
         "ext-openssl": "*",
         "guzzlehttp/guzzle": "^7.9",
-        "firebase/php-jwt": "^7.0"
+        "swanflutter/native-jwt": "^1.2"
     },
     "require-dev": {
         "orchestra/testbench": "^9.0|^10.0",
@@ -79,5 +79,14 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../native-jwt",
+            "options": {
+                "symlink": true
+            }
+        }
+    ]
 }

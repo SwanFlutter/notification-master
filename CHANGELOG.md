@@ -18,14 +18,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - CI workflow cleanup: bumped Composer cache key, and added `--no-scripts` to the autoload dump step.
-- Kept `firebase/php-jwt` pinned at `^7.0` to avoid the `PKSA-y2cr-5h3j-g3ys` weak-encryption advisory affecting all `< 7.0.0` releases.
+- Replaced `firebase/php-jwt` with [`swanflutter/native-jwt`](https://packagist.org/packages/swanflutter/native-jwt) (`^1.2`), a drop-in, dependency-free JWT library with built-in `alg=none` and algorithm-confusion protection. The code now uses `SwanFlutter\NativeJwt\JWT` for RS256 OAuth2 assertion signing.
+
+### Added
+- `OAuthTokenTest` unit suite (14 tests) covering credential validation, RS256 JWT assertion signing/verification, in-memory token caching, refresh/expiry handling, and all `AuthenticationException` failure paths.
 
 ---
 
 ## [1.0.1] — 2026-07-13
 
 ### Fixed
-- Upgraded `firebase/php-jwt` from `^6.10` to `^7.0` to resolve security advisory `PKSA-y2cr-5h3j-g3ys`.
+- Upgraded the JWT signing dependency to `swanflutter/native-jwt` (`^1.2`), replacing `firebase/php-jwt` and removing exposure to the `PKSA-y2cr-5h3j-g3ys` weak-encryption advisory.
 - Extended `orchestra/testbench` support to `^9.0|^10.0` covering both Laravel 11 and 12.
 - Fixed 12 code style issues flagged by Laravel Pint across all source files.
 - Removed `composer.lock` from version control (library best practice).
