@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.3] — 2026-07-17
+
+### Changed
+- Released a clean package build with `firebase/php-jwt` fully removed from `composer.json` dependencies. The only JWT dependency is now [`swanflutter/native-jwt`](https://packagist.org/packages/swanflutter/native-jwt) (`^1.2`).
+- Published version metadata (`1.0.3`) so Packagist serves a build that no longer requires `firebase/php-jwt ^7.0`, resolving the `composer require` conflict for projects pinning `firebase/php-jwt ^6.x`.
+
+---
+
 ## [1.0.2] — 2026-07-15
 
 ### Fixed
